@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">VehicleApp</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="dashboard_fragment_label">Dashboard</string>
+    <string name="add_vehicle_fragment_label">Add Vehicle</string>
+    <string name="txt_vehicle_detail">Add Vehicle</string>
+    <string name="txt_add">Add</string>
+    <string name="add">+ Add</string>
+    <string name="own">Own</string>
+    <string name="contractor">Contractor</string>
+    <string name="ownership">Ownership</string>
+    <string name="imei">IMEI</string>
+    <string name="enter_last_6_digit_of_imei">Enter last 6-digit of IMEI</string>
+    <string name="more">More</string>
+
+</resources>
