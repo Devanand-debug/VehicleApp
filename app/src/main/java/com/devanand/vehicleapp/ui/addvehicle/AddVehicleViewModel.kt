@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,18 +21,43 @@ class AddVehicleViewModel @Inject constructor(private val vehicleRepository: Veh
 //    val vehicleMasterData: StateFlow<NetworkResult<AddVehicleModel>>
 //        get() = vehicleRepository.vehicleMasterStateFlow
 
-    val mVehicleData = vehicleRepository.vehicleMasterStateFlow
+   // val mVehicleData = vehicleRepository.vehicleMasterStateFlow
+
+    val payload = VehicleMasterPayload(
+        clientid = 11,
+        mno = "9889897789",
+        passcode = 3476,
+        enterprise_code = 1007
+    )
+
+
+
+    private val _vehicleMasterStateFlow = MutableLiveData<NetworkResult<AddVehicleModel>>(NetworkResult.Loading())
+    val vehicleMasterStateFlow: LiveData<NetworkResult<AddVehicleModel>> = _vehicleMasterStateFlow
 
     init {
+//        viewModelScope.launch {
+//            withContext(Dispatchers.IO) {
+//                vehicleRepository.addVehicleAPICall(payload)
+//            }
+//        }
+        getVehicleData()
+    }
+
+
+    fun getVehicleData(){
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val payload = VehicleMasterPayload(
-                    clientid = 11,
-                    mno = "9889897789",
-                    passcode = 3476,
-                    enterprise_code = 1007
-                )
-                vehicleRepository.addVehicleAPICall(payload)
+            _vehicleMasterStateFlow.postValue(NetworkResult.Loading())
+
+            val response = vehicleRepository.addVehicleAPICall(payload)
+
+            if (response.isSuccessful && response.body() != null) {
+                _vehicleMasterStateFlow.postValue(NetworkResult.Success(response.body()!!))
+            } else if (response.errorBody() != null) {
+                val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
+                _vehicleMasterStateFlow.postValue(NetworkResult.Error(errorObj.getString("message")))
+            } else {
+                _vehicleMasterStateFlow.postValue(NetworkResult.Error("Something Went Wrong"))
             }
         }
     }

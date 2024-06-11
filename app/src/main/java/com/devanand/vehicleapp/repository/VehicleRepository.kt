@@ -11,26 +11,31 @@ import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.json.JSONObject
+import retrofit2.Response
 import javax.inject.Inject
 
 class VehicleRepository @Inject constructor(private val vehicleApi:VehicleAPI) {
 
-    private val _vehicleMasterStateFlow = MutableLiveData<NetworkResult<AddVehicleModel>>(NetworkResult.Loading())
-   val vehicleMasterStateFlow: LiveData<NetworkResult<AddVehicleModel>> = _vehicleMasterStateFlow
+//    private val _vehicleMasterStateFlow = MutableLiveData<NetworkResult<AddVehicleModel>>(NetworkResult.Loading())
+//   val vehicleMasterStateFlow: LiveData<NetworkResult<AddVehicleModel>> = _vehicleMasterStateFlow
 
-    suspend fun addVehicleAPICall(payload: VehicleMasterPayload): MutableLiveData<NetworkResult<AddVehicleModel>> {
-        _vehicleMasterStateFlow.postValue(NetworkResult.Loading())
-        val response = vehicleApi.addVehicle(payload)
-        Log.d("TAG", "addVehicleAPICall: ${response.body()?.vehicleType}")
+//    suspend fun addVehicleAPICall(payload: VehicleMasterPayload): MutableLiveData<NetworkResult<AddVehicleModel>> {
+//        _vehicleMasterStateFlow.postValue(NetworkResult.Loading())
+//        val response = vehicleApi.addVehicle(payload)
+//        Log.d("TAG", "addVehicleAPICall: ${response.body()?.vehicleType}")
+//
+//        if (response.isSuccessful && response.body() != null) {
+//            _vehicleMasterStateFlow.postValue(NetworkResult.Success(response.body()!!))
+//        } else if (response.errorBody() != null) {
+//            val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
+//            _vehicleMasterStateFlow.postValue(NetworkResult.Error(errorObj.getString("message")))
+//        } else {
+//            _vehicleMasterStateFlow.postValue(NetworkResult.Error("Something Went Wrong"))
+//        }
+//        return _vehicleMasterStateFlow
+//    }
 
-        if (response.isSuccessful && response.body() != null) {
-            _vehicleMasterStateFlow.postValue(NetworkResult.Success(response.body()!!))
-        } else if (response.errorBody() != null) {
-            val errorObj = JSONObject(response.errorBody()!!.charStream().readText())
-            _vehicleMasterStateFlow.postValue(NetworkResult.Error(errorObj.getString("message")))
-        } else {
-            _vehicleMasterStateFlow.postValue(NetworkResult.Error("Something Went Wrong"))
-        }
-        return _vehicleMasterStateFlow
+    suspend fun addVehicleAPICall(payload: VehicleMasterPayload): Response<AddVehicleModel> {
+        return vehicleApi.addVehicle(payload)
     }
 }

@@ -78,7 +78,7 @@ class AddVehicleFragment : Fragment() {
         }
        // binding.recyclerView.visibility = View.GONE
 
-        addVehicleViewModel.mVehicleData.observe(viewLifecycleOwner){
+        addVehicleViewModel.vehicleMasterStateFlow.observe(viewLifecycleOwner){
             when(it) {
                     is NetworkResult.Success ->{
                         try {
